@@ -67,8 +67,11 @@ section .text
         mov ecx, msg2
         mov edx, l2
         int 80h
-        mov esi, dword[large]
-        call print_word
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, dword[large]
+        movzx edx, word[mlen]
+        int 80h
 
         mov eax, 4
         mov ebx, 1
@@ -81,8 +84,11 @@ section .text
         mov ecx, msg3
         mov edx, l3
         int 80h
-        mov esi, dword[small]
-        call print_word
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, dword[small]
+        movzx edx, word[slen]
+        int 80h
     exit:
     mov eax, 1
     mov ebx, 0
@@ -103,6 +109,8 @@ read_str:
         jmp rstr_loop
 
     exit_rstr:
+    mov byte[edi], 32
+    inc edi
     mov byte[edi], 0
     popa
     ret
