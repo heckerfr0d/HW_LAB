@@ -3,6 +3,45 @@
 
 Just Balcony Things 🙂
 
+## Templates
+
+```asm
+section .data
+    msg1 : db 'string',10
+    l1 : equ $-msg1
+    msg2 : db 'Output : '
+    l2 : equ $-msg2
+    zero: db '0'
+    space: db ' '
+    nl: db 10
+
+section .bss
+    string : resb 200
+    string1: resb 200
+    c : resb 1
+    count: resb 1
+    temp: resb 1
+
+section .text
+
+    global _start:
+    _start:
+
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, msg1
+        mov edx, l1
+        int 80h
+
+    exit:
+        mov esi, edi
+        call print_word
+        mov eax, 1
+        mov ebx, 0
+        int 80h
+
+```
+
 ## Functions
 
 ### Integers
