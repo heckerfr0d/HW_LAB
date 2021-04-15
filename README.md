@@ -88,6 +88,23 @@ print_num:
 ```
 
 ```asm
+print array:
+    pusha
+    print_loop:
+        cmp eax,dword[n]
+        je end_print1
+        mov cx,word[ebx+2*eax]
+        mov word[num],cx
+        call print_num
+        inc eax
+        jmp print_loop
+    end_print1:
+        popa
+        ret
+```
+
+```asm
+; finds the frequency of num in array of size n
 get_freq:
     pusha
     mov ebx, array
@@ -133,16 +150,17 @@ read_array1:
 ```
 
 ```asm
+; search for q in array of size n
 search:
     pusha
-    mov ebx, array2
+    mov ebx, array
     mov ecx, 0
     search_loop:
         mov ax , word[ebx+2*ecx]
         cmp ax, word[q]
         je found
         inc ecx
-        cmp ecx, dword[n2]
+        cmp ecx, dword[n]
         jb search_loop
     mov word[num], 0
     jmp end_search
@@ -178,6 +196,7 @@ read_str:
 ```
 
 ```asm
+; read string and store address of each word in variable in ebx and count of words in nw
 read_words:
     pusha
     rstr_loop:
@@ -270,6 +289,7 @@ print_char:
 ```
 
 ```asm
+; compares 2 words in esi, edi and sets l=1 if esi>edi
 comp_words:
     pusha
     comp_loop:
@@ -287,6 +307,7 @@ comp_words:
 ```
 
 ```asm
+checks if substring in edi is in string in esi
 comp_substr:
     pusha
     mov edi, find
