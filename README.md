@@ -3,45 +3,6 @@
 
 Just Balcony Things 🙂
 
-## Templates
-
-```asm
-section .data
-    msg1 : db 'string',10
-    l1 : equ $-msg1
-    msg2 : db 'Output : '
-    l2 : equ $-msg2
-    zero: db '0'
-    space: db ' '
-    nl: db 10
-
-section .bss
-    string : resb 200
-    string1: resb 200
-    c : resb 1
-    count: resb 1
-    temp: resb 1
-
-section .text
-
-    global _start:
-    _start:
-
-        mov eax, 4
-        mov ebx, 1
-        mov ecx, msg1
-        mov edx, l1
-        int 80h
-
-    exit:
-        mov esi, edi
-        call print_word
-        mov eax, 1
-        mov ebx, 0
-        int 80h
-
-```
-
 ## Functions
 
 ### Integers
@@ -370,3 +331,87 @@ comp_substr:
         popa
         ret
 ```
+
+;concatenate
+
+str_con:
+    pusha
+    mov eax, string1
+    mov ebx, string2
+    add ax, word[len1]
+    loop_con:
+        cmp byte[ebx], 0
+        je exit_con 
+        mov cl, byte[ebx]
+        mov byte[eax], cl
+        inc eax
+        inc ebx
+        jmp loop_con
+    exit_con:
+    mov byte[eax], 0
+    popa
+    ret
+    
+;make array of starting addresses of string
+
+make_str_arr:
+    pusha
+    mov eax, string1
+    mov ebx, str_arr
+    mov dword[ebx], eax
+    add ebx, 4
+    inc byte[arr_len]
+    loop_str_arr:
+        cmp byte[eax], 0
+        je exit_str_arr
+        cmp byte[eax], ' '
+        jne continue
+        inc eax
+        mov dword[ebx], eax
+        add ebx, 4
+        inc byte[arr_len]
+        jmp loop_str_arr
+
+        continue:
+            inc eax
+            jmp loop_str_arr
+
+    exit_str_arr:
+    popa
+    ret
+    
+    ;make string from array of starting addresses of words
+    
+    make_str:
+    pusha
+    mov eax, str_arr
+    mov ebx, string2
+    mov ecx, 0
+    loop_make_str:
+        cmp cl, byte[arr_len]
+        je exit_make_str
+        mov edx, dword[eax + 4*ecx]
+        loop_in:
+            cmp byte[edx], ' ' 
+            je exit_in
+            cmp byte[edx], 0
+            je exit_in
+            mov ch, byte[edx]
+            mov byte[ebx], ch
+            mov ch, 0
+            inc ebx
+            inc edx
+            jmp loop_in
+
+        exit_in:
+            mov byte[ebx], ' '
+            inc ebx
+            inc ecx
+            jmp loop_make_str
+
+    exit_make_str:
+    dec ebx
+    mov byte[ebx], 0
+    popa
+    ret
+    
