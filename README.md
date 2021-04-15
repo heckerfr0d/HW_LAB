@@ -332,8 +332,8 @@ comp_substr:
         ret
 ```
 
+```asm
 ;concatenate
-
 str_con:
     pusha
     mov eax, string1
@@ -351,9 +351,10 @@ str_con:
     mov byte[eax], 0
     popa
     ret
-    
-;make array of starting addresses of string
+```
 
+```asm
+;make array of starting addresses of string
 make_str_arr:
     pusha
     mov eax, string1
@@ -379,9 +380,10 @@ make_str_arr:
     exit_str_arr:
     popa
     ret
+```
     
+```asm
     ;make string from array of starting addresses of words
-    
     make_str:
     pusha
     mov eax, str_arr
@@ -414,4 +416,4 @@ make_str_arr:
     mov byte[ebx], 0
     popa
     ret
-    
+```    
