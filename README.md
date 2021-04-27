@@ -341,7 +341,7 @@ str_con:
     add ax, word[len1]
     loop_con:
         cmp byte[ebx], 0
-        je exit_con 
+        je exit_con
         mov cl, byte[ebx]
         mov byte[eax], cl
         inc eax
@@ -381,7 +381,7 @@ make_str_arr:
     popa
     ret
 ```
-    
+
 ```asm
     ;make string from array of starting addresses of words
     make_str:
@@ -394,7 +394,7 @@ make_str_arr:
         je exit_make_str
         mov edx, dword[eax + 4*ecx]
         loop_in:
-            cmp byte[edx], ' ' 
+            cmp byte[edx], ' '
             je exit_in
             cmp byte[edx], 0
             je exit_in
@@ -416,4 +416,18 @@ make_str_arr:
     mov byte[ebx], 0
     popa
     ret
-```    
+```
+
+```asm
+; copy string in esi to edi
+strcpy:
+    pusha
+    loop_cpy:
+        movsb
+        cmp byte[esi-1], 0
+        je end
+        jmp loop_cpy
+    end:
+        popa
+        ret
+```
